@@ -16,7 +16,7 @@ class Equipo{
 		string nombre;
 		int ataque;
 		int defensa;
-		int puntos;
+		int puntos=0;
 		int grupo;
 		ListaJugadores jugadores = ListaJugadores();	
 		ListaJugadores suplentes = ListaJugadores();
@@ -29,6 +29,7 @@ class Equipo{
 			defensa=_defensa;
 			grupo = _grupo;
 		}
+		
 		Equipo(){
 			
 		}

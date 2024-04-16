@@ -9,13 +9,13 @@ using namespace std;
 class Partido{
 
 	private:
-		Equipo equipo1;
-		Equipo equipo2;
+		Equipo* equipo1=NULL;
+		Equipo* equipo2=NULL;
 		ListaJugadores expulsiones = ListaJugadores();
 		string fecha;
 		
 	public:
-		Partido(Equipo e1,Equipo e2,string _fecha){
+		Partido(Equipo* e1,Equipo* e2,string _fecha){
 			equipo1=e1;
 			equipo2=e2;
 			fecha = _fecha;
@@ -23,9 +23,9 @@ class Partido{
 		Partido(){
 		}
 		
-		Equipo getGanador(){
+		Equipo* getGanador(){
 			
-			if(equipo1.getGoles()>equipo2.getGoles()){
+			if(equipo1->getGoles()>equipo2->getGoles()){
 				return equipo1;
 			}
 			else{
@@ -34,10 +34,10 @@ class Partido{
 		}
 		
 		//metodos getters
-		Equipo getEquipo1(){
+		Equipo* getEquipo1(){
 			return equipo1;
 		}
-		Equipo getEquipo2(){
+		Equipo* getEquipo2(){
 			return equipo2;
 		}
 		

@@ -14,7 +14,7 @@
 using namespace std;
 
 struct nodoPartido{
-	Partido partido;
+	Partido* partido;
 	nodoPartido* siguiente;
 };
 
@@ -58,7 +58,7 @@ class Mundial{
 			OrganizarGrupo();
 		}		
 		
-		void setPartido(Partido p){
+		/*void setPartido(Partido p){
 			
 			nodoPartido *nuevoNodo = new nodoPartido();
 			nuevoNodo->partido=p;
@@ -66,12 +66,121 @@ class Mundial{
 			
 			partidos=nuevoNodo;
 			nuevoNodo->siguiente=aux1;
-		}
+		}*/
 		
 		void JugarPartido(){
 			
+			int max;
+			int defen1,defen2;
+			int ataque1,ataque2;
+			int total1,total2;
+			int ventaja;
+			NodoEquipo* grupo=NULL;			
+			for(int i=0;i<4;i++){
+				
+				if(i==0){
+					grupo=grupo1.mostrarList();
+					
+				}
+				else if(i==1){
+					grupo=grupo2.mostrarList();
+					
+				}
+				else if(i==2){
+					grupo=grupo3.mostrarList();
+					
+				}
+				else if(i==3){
+					grupo=grupo4.mostrarList();
+					
+				}
+				
+				
+				
+				
+				//primer grupo
+				
+					
+					NodoEquipo* aux=grupo;
+					for(int h=0;h<4;h++){						
+						grupo=grupo->siguiente;
+						
+						while(grupo!=NULL){
+							//estadisticas del primer equipo
+							
+							defen1=grupo->equipo->getDefensa();
+							ataque1=grupo->equipo->getAtaque();
+							total1=defen1+ataque1;
+							
+							//estadisticas del segundo equipo
+							defen2=aux->equipo->getDefensa();
+							ataque2=aux->equipo->getAtaque();							
+							total2=defen2+ataque2;
+							
+							if(total1>=total2){
+								ventaja= total1-total2;
+								asignarGoles(5+ventaja,grupo);
+								asignarGoles(5,aux,grupo);
+							}
+							else{
+								ventaja= total2-total1;
+								asignarGoles(5,grupo);
+								asignarGoles(5+ventaja,aux,grupo);
+							}
+							
+							//asignando los puntos
+							if(grupo->equipo->getGoles()>aux->equipo->getGoles()){
+								grupo->equipo->setPuntos(grupo->equipo->getPuntos()+3);
+							}
+							else{
+								aux->equipo->setPuntos(aux->equipo->getPuntos()+3);
+							}
+							
+							//guardando el partido(copia de los equipos originales)
+							
+							//equipo 1
+							Equipo* referencia = grupo->equipo;
+							Equipo* e1 = new Equipo(referencia->getId(),referencia->getNombre(),referencia->getAtaque(),referencia->getDefensa(),referencia->getGrupo());
+							e1->setPuntos(referencia->getPuntos());
+							e1->setGoles(referencia->getGoles());
+							Nodo* jugaf= referencia->getjugadores();
+							while(jugaf!=NULL){
+								Jugador* ref =jugaf->jugador; 
+								Jugador* juga = new Jugador(ref->getNumero(),ref->getNombre(),ref->getAgresividad());
+								e1->cargarJugadores(juga);
+								
+								jugaf=jugaf->siguiente;								
+							}
+							
+							//equipo 2	
+							referencia = aux->equipo;						
+							Equipo* e2 = new Equipo(referencia->getId(),referencia->getNombre(),referencia->getAtaque(),referencia->getDefensa(),referencia->getGrupo());
+							e2->setPuntos(referencia->getPuntos());
+							e2->setGoles(referencia->getGoles());							
+							jugaf= referencia->getjugadores();
+							while(jugaf!=NULL){
+								Jugador* ref =jugaf->jugador; 
+								Jugador* juga = new Jugador(ref->getNumero(),ref->getNombre(),ref->getAgresividad());
+								e2->cargarJugadores(juga);
+								
+								jugaf=jugaf->siguiente;
+							}
+							
+							Partido* parti = new Partido(e1,e2,"01/02/2000");
+							agregarPartido(parti);
+							grupo=grupo->siguiente;
+						}					
+						aux=aux->siguiente;
+						grupo=aux;	
+						//grupo=grupo->siguiente;
+					}
+
+									
+			}
 			
 			
+			
+			//asignarGoles						
 		}
 		
 		void cargarEquipos(){
@@ -141,23 +250,40 @@ class Mundial{
 			return numero;
 		}
 		
-		/*void asignarGoles(int fin,NodoEquipo&* equipo){
+		void asignarGoles(int fin,NodoEquipo* &equipo){
 			
 			int goles=0;
-			random_device rd;
-			mt19937 gen(rd());
 			
 			int min= 0;
 			int max=fin;
 			
-			uniform_int_distribution<> distribucion(min,max);
 			
-			goles = distribucion(gen);
 			
-			equipo->equipo.setGoles(goles);
+			goles = generarNumeros(max,min);
+			
+			equipo->equipo->setGoles(goles);
 			
 		}
-		
+		void asignarGoles(int fin,NodoEquipo* &equipo,NodoEquipo* comprobar){
+			int goles=0;
+			
+			int min= 0;
+			int max=fin;
+			bool iguales= true;
+			
+			while(iguales){
+				goles = generarNumeros(max,min);
+				
+				if(goles != comprobar->equipo->getGoles()){
+					iguales=false;
+				}
+				
+			}
+			
+			
+			equipo->equipo->setGoles(goles);
+		}
+		/*
 		void asignarTarjetas(int max,NodoEquipo&* equipo){
 			
 			int tarjetas=0;
@@ -256,14 +382,14 @@ class Mundial{
 			}
 		}
 		
-		int generarNumeros(int max,int min){
+		*/int generarNumeros(int max,int min){
 			
 			int numero;
 			
 			numero = min + rand() % (max-min);
 			
 			return numero;
-		}/*
+		}
 		
 		/*void exportarResultados(){
 			
@@ -376,6 +502,29 @@ class Mundial{
 		}
 		NodoEquipo* getGrupoD(){
 			return grupo4.mostrarList();
+		}
+		
+		nodoPartido* getPartidos(){
+			return partidos;
+		}
+		
+		void agregarPartido(Partido* &p){
+			nodoPartido *nuevoNodo = new nodoPartido();
+			nuevoNodo->partido=p;
+			nodoPartido *aux1= partidos;
+			nodoPartido *aux2;
+			while(aux1!=NULL){
+				aux2=aux1;
+				aux1=aux1->siguiente;
+			}
+			if(aux1==partidos){
+				partidos=nuevoNodo;
+			}
+			else{
+				aux2->siguiente=nuevoNodo;
+			}
+			
+			nuevoNodo->siguiente=aux1;
 		}
 };
 #endif

@@ -9,7 +9,7 @@ using namespace std;
 
 int main() {
 	
-	int opcion;	
+	int opcion,opcion2;	
 	Mundial mundial = Mundial();
 	do{
 		cout<<"\t.:MUNDIAL:."<<endl<<endl;
@@ -22,7 +22,43 @@ int main() {
 		system("cls");
 		switch(opcion){
 			case 1:{
-				
+				mundial.JugarPartido();
+				do{
+					cout<<"\tOpciones del Mundial"<<endl<<endl;
+					cout<<"1.Simular todos el mundial"<<endl;
+					cout<<"2.Simular partido a partido"<<endl;
+					cout<<"3.Regresar"<<endl;
+					cout<<"->";cin>>opcion2;
+					
+					switch(opcion2){
+						case 1:{
+							
+							break;
+						}
+						case 2:{
+							nodoPartido* partidos=mundial.getPartidos();
+							int contador=1;
+							cout<<"PARTIDOS"<<endl<<endl;
+							while(partidos!=NULL){
+								cout<<"partido numero: "<<contador<<endl;
+								cout<<partidos->partido->getEquipo1()->getNombre();
+								cout<<"["<<partidos->partido->getEquipo1()->getGoles();
+								cout<<"] - ["<<partidos->partido->getEquipo2()->getGoles();
+								cout<<"]";
+								cout<<partidos->partido->getEquipo2()->getNombre()<<endl;
+								cout<<"Fecha: "<<partidos->partido->getFecha()<<endl;
+								
+								cout<<"----------------------------------------------"<<endl;
+								contador++;
+								partidos=partidos->siguiente;
+								system("pause");
+							}
+							break;
+						}
+					}
+										
+				}while(opcion2 != 3);
+
 				break;
 			}
 			case 2:{
@@ -63,13 +99,13 @@ int main() {
 				int mitad;
 				while(a!=NULL){
 					cout<<"|";
-					largo= a->equipo->getNombre().length();
+					largo= a->equipo->getNombre().length()+3;
 					largo=13-largo;
 					mitad = largo/2;
 					for(int i=0;i<mitad;i++){
 						cout<<" ";
 					}
-					cout<<a->equipo->getNombre();
+					cout<<a->equipo->getNombre()<<"["<<a->equipo->getPuntos()<<"]";
 					for(int i=0;i<mitad;i++){
 						cout<<" ";
 					}
@@ -83,13 +119,13 @@ int main() {
 				cout<<"--------------"<<endl;
 				while(b!=NULL){
 					cout<<"|";
-					largo= b->equipo->getNombre().length();
+					largo= b->equipo->getNombre().length()+3;
 					largo=13-largo;
 					mitad = largo/2;
 					for(int i=0;i<mitad;i++){
 						cout<<" ";
 					}					
-					cout<<b->equipo->getNombre();
+					cout<<b->equipo->getNombre()<<"["<<b->equipo->getPuntos()<<"]";
 					for(int i=0;i<mitad;i++){
 						cout<<" ";
 					}
@@ -103,13 +139,13 @@ int main() {
 				cout<<"--------------"<<endl;
 				while(c!=NULL){
 					cout<<"|";
-					largo= c->equipo->getNombre().length();
+					largo= c->equipo->getNombre().length()+3;
 					largo=13-largo;
 					mitad = largo/2;
 					for(int i=0;i<mitad;i++){
 						cout<<" ";
 					}					
-					cout<<c->equipo->getNombre();
+					cout<<c->equipo->getNombre()<<"["<<c->equipo->getPuntos()<<"]";
 					for(int i=0;i<mitad;i++){
 						cout<<" ";
 					}
@@ -123,13 +159,13 @@ int main() {
 				cout<<"--------------"<<endl;
 				while(d!=NULL){
 					cout<<"|";
-					largo= d->equipo->getNombre().length();
+					largo= d->equipo->getNombre().length()+3;
 					largo=13-largo;
 					mitad = largo/2;
 					for(int i=0;i<mitad;i++){
 						cout<<" ";
 					}					
-					cout<<d->equipo->getNombre();
+					cout<<d->equipo->getNombre()<<"["<<d->equipo->getPuntos()<<"]";
 					for(int i=0;i<mitad;i++){
 						cout<<" ";
 					}
