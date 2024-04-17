@@ -8,7 +8,7 @@ using namespace std;
 
 
 int main() {
-	
+	srand(time(nullptr));
 	int opcion,opcion2;	
 	Mundial mundial = Mundial();
 	do{
@@ -29,7 +29,7 @@ int main() {
 					cout<<"2.Simular partido a partido"<<endl;
 					cout<<"3.Regresar"<<endl;
 					cout<<"->";cin>>opcion2;
-					
+					system("cls");
 					switch(opcion2){
 						case 1:{
 							
@@ -37,8 +37,10 @@ int main() {
 						}
 						case 2:{
 							nodoPartido* partidos=mundial.getPartidos();
+							Nodo* jugadoresTarjetas;
 							int contador=1;
-							cout<<"PARTIDOS"<<endl<<endl;
+							cout<<"\tPARTIDOS"<<endl<<endl;
+							//int contador
 							while(partidos!=NULL){
 								cout<<"partido numero: "<<contador<<endl;
 								cout<<partidos->partido->getEquipo1()->getNombre();
@@ -47,7 +49,39 @@ int main() {
 								cout<<"]";
 								cout<<partidos->partido->getEquipo2()->getNombre()<<endl;
 								cout<<"Fecha: "<<partidos->partido->getFecha()<<endl;
+								cout<<"\nINFORMACION ADICIONAL"<<endl;
+								cout<<"tarjetas "<<partidos->partido->getEquipo1()->getNombre()<<"["<<partidos->partido->getEquipo1()->getTotalTarjetas()<<"]."<<endl;
+								cout<<"tarjetas rojas["<<partidos->partido->getEquipo1()->getTotalTarjetasRojas()<<"] {";
+								jugadoresTarjetas = partidos->partido->getEquipo1()->getJugadoresConRojas();
+								while(jugadoresTarjetas != NULL){
+									cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
+									jugadoresTarjetas = jugadoresTarjetas->siguiente;
+								}
+								cout<<"}."<<endl;
+								cout<<"tarjetas Amarillas["<<partidos->partido->getEquipo1()->getTotalTarjetasAmarillas()<<"] {";
+								jugadoresTarjetas = partidos->partido->getEquipo1()->getJugadoresConAmarillas();
+								while(jugadoresTarjetas != NULL){
+									cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
+									jugadoresTarjetas = jugadoresTarjetas->siguiente;
+								}
+								cout<<"}"<<endl<<endl;
 								
+								
+								cout<<"tarjetas "<<partidos->partido->getEquipo2()->getNombre()<<"["<<partidos->partido->getEquipo2()->getTotalTarjetas()<<"]."<<endl;
+								cout<<"tarjetas rojas["<<partidos->partido->getEquipo2()->getTotalTarjetasRojas()<<"] {";
+								jugadoresTarjetas = partidos->partido->getEquipo2()->getJugadoresConRojas();
+								while(jugadoresTarjetas != NULL){
+									cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
+									jugadoresTarjetas = jugadoresTarjetas->siguiente;
+								}
+								cout<<"}."<<endl;
+								cout<<"tarjetas Amarillas["<<partidos->partido->getEquipo2()->getTotalTarjetasAmarillas()<<"] {";
+								jugadoresTarjetas = partidos->partido->getEquipo2()->getJugadoresConAmarillas();
+								while(jugadoresTarjetas != NULL){
+									cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
+									jugadoresTarjetas = jugadoresTarjetas->siguiente;
+								}
+								cout<<"}"<<endl;								
 								cout<<"----------------------------------------------"<<endl;
 								contador++;
 								partidos=partidos->siguiente;
@@ -66,17 +100,24 @@ int main() {
 				cout<<"\tEQUIPOS\n"<<endl;
 				NodoEquipo* x = mundial.getEquipos();
 				Nodo* z =NULL;
+				Nodo* suple =NULL;
 				
 				while(x != NULL){
 					cout<<x->equipo->getNombre()<<"(Def:"<<x->equipo->getDefensa()
 					<<", Ataq: "<<x->equipo->getAtaque()<<", Grupo: "<<x->equipo->getGrupo()
 					<<") {"<<endl<<endl;
 					z=x->equipo->getjugadores();
+					suple=x->equipo->getSuplentes();
 					while(z!=NULL){
 						cout<<"-> "<<z->jugador->getNombre()<<"(Agresividdad:"<<z->jugador->getAgresividad()<<")."<<endl;
 						z=z->siguiente;
 					}
-					cout<<endl<<"}"<<endl<<endl;
+					cout<<endl<<"Suplentes:"<<endl;
+					while(suple!=NULL){
+						cout<<"-> "<<suple->jugador->getNombre()<<"(Agresividdad:"<<suple->jugador->getAgresividad()<<")."<<endl;
+						suple=suple->siguiente;
+					}
+					cout<<endl<<"}"<<endl<<endl<<endl;
 					x=x->siguiente;
 				}
 				system("pause");

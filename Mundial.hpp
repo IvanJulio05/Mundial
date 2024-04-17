@@ -57,16 +57,7 @@ class Mundial{
 			cargarEquipos();
 			OrganizarGrupo();
 		}		
-		
-		/*void setPartido(Partido p){
-			
-			nodoPartido *nuevoNodo = new nodoPartido();
-			nuevoNodo->partido=p;
-			nodoPartido *aux1= partidos;
-			
-			partidos=nuevoNodo;
-			nuevoNodo->siguiente=aux1;
-		}*/
+	
 		
 		void JugarPartido(){
 			
@@ -75,7 +66,7 @@ class Mundial{
 			int ataque1,ataque2;
 			int total1,total2;
 			int ventaja;
-			NodoEquipo* grupo=NULL;			
+			NodoEquipo* grupo=NULL;						
 			for(int i=0;i<4;i++){
 				
 				if(i==0){
@@ -121,12 +112,84 @@ class Mundial{
 								ventaja= total1-total2;
 								asignarGoles(5+ventaja,grupo);
 								asignarGoles(5,aux,grupo);
+								
 							}
 							else{
 								ventaja= total2-total1;
 								asignarGoles(5,grupo);
 								asignarGoles(5+ventaja,aux,grupo);
 							}
+							
+							//asignando las tarjetas
+							
+							//primer equipo
+							
+							int agresividadTotal=grupo->equipo->getTotalAgresividad();
+							const int AGRESIVIDAD_MAXIMA_TOLERADA=150;
+							const int AGRESIVIDAD_MEDIA_TOLERADA=100;
+							int sobrante;							
+							if(agresividadTotal > AGRESIVIDAD_MAXIMA_TOLERADA){
+								
+								sobrante= agresividadTotal - AGRESIVIDAD_MAXIMA_TOLERADA;
+								sobrante = sobrante/10;
+								sobrante*=2;
+								if(sobrante>=1){
+									if(sobrante<8){
+										
+										asignarTarjetas(10-sobrante,grupo);
+									}
+									else{
+										asignarTarjetas(2,grupo);
+									}
+									
+								}
+								
+							}else if(agresividadTotal > AGRESIVIDAD_MEDIA_TOLERADA){
+								
+								sobrante= agresividadTotal - AGRESIVIDAD_MEDIA_TOLERADA;
+								sobrante = sobrante/10;
+								
+								if(sobrante>=1){
+									asignarTarjetas(10-sobrante,grupo);
+								}
+							}
+							else{
+								
+								asignarTarjetas(10,grupo);
+								
+							}
+							
+							//segundo equipo							
+							agresividadTotal=grupo->equipo->getTotalAgresividad();
+							sobrante;							
+							if(agresividadTotal > AGRESIVIDAD_MAXIMA_TOLERADA){
+								
+								sobrante= agresividadTotal - AGRESIVIDAD_MAXIMA_TOLERADA;
+								sobrante = sobrante/10;
+								sobrante*=2;
+								if(sobrante>=1){
+									if(sobrante<8){
+										asignarTarjetas(10-sobrante,aux);
+									}
+									else{
+										asignarTarjetas(2,aux);
+									}
+									
+								}
+								
+							}else if(agresividadTotal > AGRESIVIDAD_MEDIA_TOLERADA){
+								
+								sobrante= agresividadTotal - AGRESIVIDAD_MEDIA_TOLERADA;
+								sobrante = sobrante/10;
+								
+								if(sobrante>=1){
+									asignarTarjetas(10-sobrante,aux);
+								}
+							}
+							else{
+								asignarTarjetas(10,aux);
+								
+							}							
 							
 							//asignando los puntos
 							if(grupo->equipo->getGoles()>aux->equipo->getGoles()){
@@ -144,9 +207,23 @@ class Mundial{
 							e1->setPuntos(referencia->getPuntos());
 							e1->setGoles(referencia->getGoles());
 							Nodo* jugaf= referencia->getjugadores();
+							int nAmarillas,nRojas;
+							
 							while(jugaf!=NULL){
 								Jugador* ref =jugaf->jugador; 
 								Jugador* juga = new Jugador(ref->getNumero(),ref->getNombre(),ref->getAgresividad());
+								nAmarillas= ref->getNumeroCartas(0);
+								nRojas= ref->getNumeroCartas(1);
+								//guardando las tarjetas del partido
+								//amarillas
+								for(int x=0;x<nAmarillas;x++){
+									juga->setTarjeta(0);
+								}
+								//rojas
+								for(int x=0;x<nRojas;x++){
+									juga->setTarjeta(1);
+								}
+								
 								e1->cargarJugadores(juga);
 								
 								jugaf=jugaf->siguiente;								
@@ -161,11 +238,21 @@ class Mundial{
 							while(jugaf!=NULL){
 								Jugador* ref =jugaf->jugador; 
 								Jugador* juga = new Jugador(ref->getNumero(),ref->getNombre(),ref->getAgresividad());
+								nAmarillas= ref->getNumeroCartas(0);
+								nRojas= ref->getNumeroCartas(1);
+								//guardando las tarjetas del partido
+								//amarillas
+								for(int x=0;x<nAmarillas;x++){
+									juga->setTarjeta(0);
+								}
+								//rojas
+								for(int x=0;x<nRojas;x++){
+									juga->setTarjeta(1);
+								}							
 								e2->cargarJugadores(juga);
 								
 								jugaf=jugaf->siguiente;
-							}
-							
+							}							
 							Partido* parti = new Partido(e1,e2,"01/02/2000");
 							agregarPartido(parti);
 							grupo=grupo->siguiente;
@@ -192,7 +279,8 @@ class Mundial{
 			string grupo;
 			string numeroJugador;
 			string nombreJugador;
-			string agresividad;
+			string agresividad;			
+			int contador=1;
 			
 			string separador="0";
 			
@@ -212,11 +300,6 @@ class Mundial{
 				getline(archivo,defensa);
 				getline(archivo,grupo);		
 				
-				/*cout<<"id: "<<idEquipo<<endl;
-				cout<<"nombreEquipo: "<<nombreEquipo<<endl;
-				cout<<"ataque: "<<ataque<<endl;
-				cout<<"defensa: "<<defensa<<endl;
-				cout<<"grupo: "<<grupo<<endl;*/
 				
 				Equipo* equi = new Equipo(convertir(idEquipo),nombreEquipo,convertir(ataque),convertir(defensa),convertir(grupo));
 				//lectura de los jugadores
@@ -227,15 +310,21 @@ class Mundial{
 					getline(archivo,agresividad);
 					getline(archivo,separador);
 					
-					//cout<<"numero del jugador: "<<numeroJugador<<endl;
-					//cout<<"nombre del jugador: "<<nombreJugador<<endl;
-					//cout<<"agresividad del jugador: "<<agresividad<<endl;
 					
 					Jugador* juga = new Jugador(convertir(numeroJugador),nombreJugador,convertir(agresividad));
-					equi->cargarJugadores(juga);
 					
+					//aqui se determina el numero de jugadores
+					if(contador<=3){
+						equi->cargarJugadores(juga);
+					}
+					else{
+						equi->cargarSuplentes(juga);
+					}
+					
+					contador++;
 					//cout<<"valor de separador = "<<separador<<endl;
 				}
+				contador=1;
 				separador="0";
 				//agregar equipo al mundial
 				equipos.agregar(equi);
@@ -283,88 +372,115 @@ class Mundial{
 			
 			equipo->equipo->setGoles(goles);
 		}
-		/*
-		void asignarTarjetas(int max,NodoEquipo&* equipo){
+		
+		void asignarTarjetas(int max,NodoEquipo* equipo){
+			
+
 			
 			int tarjetas=0;
 			
 			int nAmarillas=0;
 			int nRojas=0;
-			random_device rd;
-			mt19937 gen(rd());
-			
-			int min= 0;
-			int max=max;
 			
 			
-			uniform_int_distribution<> distribucion(min,max);
 			
+			
+			//cout<<"valor de max: "<<max<<endl;
 			for(int i=0;i<3;i++){
-				tarjetas = distribucion(gen);	
+				tarjetas = generarNumeros(max,0);	
+				//cout<<"miraaaaaaaaa veeeee: "<<tarjetas<<endl;
 				if(tarjetas == 0){
-					nAmarrillas++;
+					nAmarillas++;
 				}
 				else{
-					nRojas++;
+					if(nRojas<2){
+						if(tarjetas==1){
+							nRojas++;
+						}
+						
+					}
+					
+					
 				}
 			}
+			
+
 			
 			//asignado las cartas a los jugadores
 			
 			int numeroJugador=0;
 			int agresividad;
-			
+			bool noSalir=true;
+			Nodo* aux=NULL;
 			while(nRojas!=0 || nAmarillas!=0){
+				aux=equipo->equipo->getjugadores();
 				
-				Nodo *aux=equipo->equipo->getjugadores();
-				
-				while(aux!=NULL){
-					
+				while(aux!=NULL && noSalir){
 					agresividad = aux->jugador->getAgresividad();
-					bool noAsignada=true;
-					int nMini=aux->jugador->getNumero()-1;
-					int nMax=aux->jugador->getNumero()+1;
-					for(int i=0;i<agresividad && noAsinada;i++){
+					bool noAsignada=true;					
+					int nMini=aux->jugador->getNumero()-2;					
+					int nMax=aux->jugador->getNumero()+3;
+					
+					for(int i=0;i<agresividad && noAsignada;i++){
 						
-						numeroJugador=generarNumeros(nMax,nMini);
-						
+						numeroJugador=generarNumeros(nMax,nMini);					
 						if(numeroJugador==aux->jugador->getNumero()){
-							noAsinada=false;
+							noAsignada=false;							
+							
 							//definir que tarjeta sacerle
 							int tarjeta;
-							bool veri=true;
+							bool veri=true;							
 							while(veri){
-								tarjeta = generarNumeros(1,0);
 								
+								if(nAmarillas>0 && nRojas>0){
+									tarjeta = generarNumeros(1,0);
+								}
+								else if(nAmarillas==0){
+									tarjeta = 1;																									
+								}
+								else if(nRojas == 0){
+									tarjeta=0;
+								}													
 								if(tarjeta==0){
+									
 									if(nAmarillas!=0){
-										nAmariilas--;
+										nAmarillas--;
 										veri=false;
+										
 									}
 								}
 								else if(tarjeta==1){
+									
 									if(nRojas != 0){
 										nRojas--;
 										veri=false;
+										
 									}
 								}
+								
 							}						
 							
 							//sacandole tarjeta al jugador
 							aux->jugador->setTarjeta(tarjeta);
 						}
+						
 					}
+					//verificando si todavia hay parejeta para seguir repartiendo
+					if(nRojas==0 && nAmarillas==0){
+						noSalir=false;
+					}
+					
 					aux=aux->siguiente;
+					
+					
 				}				
-				
 			}
-			
+		
 
 			
 			
-			//equipo->equipo.setGoles(goles);
 		}
-		
+		/*
 		void HacerCambios(NodoEquipo &*equipo){
 			Nodo* jugadores=equipo->equipo->getjugadores();
 			int tarjetaRoja=0;

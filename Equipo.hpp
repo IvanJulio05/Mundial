@@ -132,6 +132,81 @@ class Equipo{
 			return j;
 		}
 		
+		int getTotalAgresividad(){
+			Nodo* jugador = jugadores.mostrarList();
+			int total=0;
+			while(jugador!=NULL){
+				total+=jugador->jugador->getAgresividad();
+				jugador=jugador->siguiente;
+			}
+			return total;
+		}
+		
+		int getTotalTarjetas(){
+			int total=0;
+			Nodo* j=jugadores.mostrarList();
+			while(j!=NULL){
+				total+=j->jugador->getTotalCartas();
+				j=j->siguiente;
+			}
+			return total;
+		}
+		
+		int getTotalTarjetasRojas(){
+			int total=0;
+			Nodo* j=jugadores.mostrarList();
+			while(j!=NULL){
+				total+=j->jugador->getNumeroCartas(1);
+				j=j->siguiente;
+			}
+			return total;
+		}
+		
+		Nodo* getJugadoresConRojas(){
+			Nodo* j=jugadores.mostrarList();
+			ListaJugadores jugadoresRojas = ListaJugadores();
+			while(j!=NULL){
+				if(j->jugador->getNumeroCartas(1)>0){
+					jugadoresRojas.agregar(j->jugador);
+				}
+				j=j->siguiente;
+			}
+				
+			if(jugadoresRojas.mostrarList()==NULL){
+				return NULL;
+			}
+			else{
+				return jugadoresRojas.mostrarList();
+			}
+			 
+		}
+		Nodo* getJugadoresConAmarillas(){
+			Nodo* j=jugadores.mostrarList();
+			ListaJugadores jugadoresAmarillas = ListaJugadores();
+			while(j!=NULL){
+				if(j->jugador->getNumeroCartas(0)>0){
+					jugadoresAmarillas.agregar(j->jugador);
+				}
+				j=j->siguiente;
+			}	
+			
+			if(jugadoresAmarillas.mostrarList()==NULL){
+				return NULL;
+			}
+			else{
+				return jugadoresAmarillas.mostrarList();
+			}			
+		}
+		
+		int getTotalTarjetasAmarillas(){
+			int total=0;
+			Nodo* j=jugadores.mostrarList();
+			while(j!=NULL){
+				total+=j->jugador->getNumeroCartas(0);
+				j=j->siguiente;
+			}
+			return total;
+		}
 		//metodo setters
 		void setId(int _id){
 			id=_id;

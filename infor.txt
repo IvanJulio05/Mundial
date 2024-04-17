@@ -17,7 +17,23 @@ pedro
 +
 4
 Juancho
-100
+10
++
+5
+Papo
+8
++
+6
+Triangulo
+1
++
+7
+mesa
+7
++
+8
+pc
+4
 -
 2
 Brasil
@@ -59,7 +75,7 @@ pedro
 +
 4
 Juancho
-100
+10
 -
 2
 Venezuela
@@ -101,7 +117,7 @@ pedro
 +
 4
 Juancho
-100
+10
 -
 2
 Uruguay
@@ -143,7 +159,7 @@ pedro
 +
 4
 Juancho
-100
+10
 -
 2
 Mexico
@@ -299,7 +315,7 @@ Honduras
 2
 1
 Juan
-2
+10
 +
 2
 Papo
@@ -332,5 +348,5 @@ Cristian
 +
 4
 julian
-5
+10
 -

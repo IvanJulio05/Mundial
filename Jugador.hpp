@@ -48,7 +48,11 @@ class Jugador{
 			return contador;
 		}
 		
-
+		int getTotalCartas(){
+			int total=getNumeroCartas(0);
+			total+=getNumeroCartas(1);
+			return total;
+		}
 		
 		
 		
