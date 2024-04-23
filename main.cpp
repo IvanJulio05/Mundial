@@ -1,3 +1,6 @@
+#ifndef MAIN_CPP
+#define MAIN_CPP	
+
 #include <iostream>
 #include<string>
 #include<stdlib.h>
@@ -6,11 +9,16 @@
 
 using namespace std;
 
+void mostrarEquipos();
+void mostrarEquiposOctavos();
+void mostrarPartidos(nodoPartido*,bool);
+
+Mundial mundial = Mundial();
 
 int main() {
 	srand(time(nullptr));
 	int opcion,opcion2;	
-	Mundial mundial = Mundial();
+	
 	do{
 		cout<<"\t.:MUNDIAL:."<<endl<<endl;
 		cout<<"1.Comenzar Mundial"<<endl;
@@ -22,71 +30,37 @@ int main() {
 		system("cls");
 		switch(opcion){
 			case 1:{
-				mundial.JugarPartido();
+				mundial.JugarPartido();				
+				mundial.JugarPartidoOctavos();
+
 				do{
 					cout<<"\tOpciones del Mundial"<<endl<<endl;
-					cout<<"1.Simular todos el mundial"<<endl;
+					cout<<"1.Simulacion fragmentada del mundial"<<endl;
 					cout<<"2.Simular partido a partido"<<endl;
 					cout<<"3.Regresar"<<endl;
 					cout<<"->";cin>>opcion2;
 					system("cls");
 					switch(opcion2){
 						case 1:{
-							
+							nodoPartido* partidos=mundial.getPartidos();
+							mostrarPartidos(partidos,false);							
+							system("pause");
+							system("cls");
+							cout<<"\n\tPUNTAJES DE LA FACE DE GRUPO"<<endl<<endl;
+							mostrarEquipos();
+							system("pause");
+							cout<<"\n\tEQUIPOS QUE AVANZAN A LA SIGUIENTE RONDA"<<endl<<endl;
+							mostrarEquiposOctavos();
+							system("pause");
+							system("cls");		
+							cout<<"\n\tOCTAVOS DE FINALES"<<endl;					
+							mostrarPartidos(mundial.getPartidosOctavos(),false);
+							system("pause");
 							break;
 						}
 						case 2:{
 							nodoPartido* partidos=mundial.getPartidos();
-							Nodo* jugadoresTarjetas;
-							int contador=1;
-							cout<<"\tPARTIDOS"<<endl<<endl;
-							//int contador
-							while(partidos!=NULL){
-								cout<<"partido numero: "<<contador<<endl;
-								cout<<partidos->partido->getEquipo1()->getNombre();
-								cout<<"["<<partidos->partido->getEquipo1()->getGoles();
-								cout<<"] - ["<<partidos->partido->getEquipo2()->getGoles();
-								cout<<"]";
-								cout<<partidos->partido->getEquipo2()->getNombre()<<endl;
-								cout<<"Fecha: "<<partidos->partido->getFecha()<<endl;
-								cout<<"\nINFORMACION ADICIONAL"<<endl;
-								cout<<"tarjetas "<<partidos->partido->getEquipo1()->getNombre()<<"["<<partidos->partido->getEquipo1()->getTotalTarjetas()<<"]."<<endl;
-								cout<<"tarjetas rojas["<<partidos->partido->getEquipo1()->getTotalTarjetasRojas()<<"] {";
-								jugadoresTarjetas = partidos->partido->getEquipo1()->getJugadoresConRojas();
-								while(jugadoresTarjetas != NULL){
-									cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
-									jugadoresTarjetas = jugadoresTarjetas->siguiente;
-								}
-								cout<<"}."<<endl;
-								cout<<"tarjetas Amarillas["<<partidos->partido->getEquipo1()->getTotalTarjetasAmarillas()<<"] {";
-								jugadoresTarjetas = partidos->partido->getEquipo1()->getJugadoresConAmarillas();
-								while(jugadoresTarjetas != NULL){
-									cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
-									jugadoresTarjetas = jugadoresTarjetas->siguiente;
-								}
-								cout<<"}"<<endl<<endl;
-								
-								
-								cout<<"tarjetas "<<partidos->partido->getEquipo2()->getNombre()<<"["<<partidos->partido->getEquipo2()->getTotalTarjetas()<<"]."<<endl;
-								cout<<"tarjetas rojas["<<partidos->partido->getEquipo2()->getTotalTarjetasRojas()<<"] {";
-								jugadoresTarjetas = partidos->partido->getEquipo2()->getJugadoresConRojas();
-								while(jugadoresTarjetas != NULL){
-									cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
-									jugadoresTarjetas = jugadoresTarjetas->siguiente;
-								}
-								cout<<"}."<<endl;
-								cout<<"tarjetas Amarillas["<<partidos->partido->getEquipo2()->getTotalTarjetasAmarillas()<<"] {";
-								jugadoresTarjetas = partidos->partido->getEquipo2()->getJugadoresConAmarillas();
-								while(jugadoresTarjetas != NULL){
-									cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
-									jugadoresTarjetas = jugadoresTarjetas->siguiente;
-								}
-								cout<<"}"<<endl;								
-								cout<<"----------------------------------------------"<<endl;
-								contador++;
-								partidos=partidos->siguiente;
-								system("pause");
-							}
+							mostrarPartidos(partidos,true);
 							break;
 						}
 					}
@@ -126,94 +100,7 @@ int main() {
 			
 			case 3:{
 				
-				
-				NodoEquipo* a=mundial.getGrupoA();
-				NodoEquipo* b=mundial.getGrupoB();
-				NodoEquipo* c=mundial.getGrupoC();
-				NodoEquipo* d=mundial.getGrupoD();
-				
-				cout<<"\n\tGrupos"<<endl<<endl;
-				cout<<" -------------"<<endl;
-				cout<<"|   GRUPO A   |"<<endl;
-				cout<<" -------------"<<endl;
-				int largo;
-				int mitad;
-				while(a!=NULL){
-					cout<<"|";
-					largo= a->equipo->getNombre().length()+3;
-					largo=13-largo;
-					mitad = largo/2;
-					for(int i=0;i<mitad;i++){
-						cout<<" ";
-					}
-					cout<<a->equipo->getNombre()<<"["<<a->equipo->getPuntos()<<"]";
-					for(int i=0;i<mitad;i++){
-						cout<<" ";
-					}
-					cout<<"|"<<endl;
-					a=a->siguiente;
-				}
-				cout<<" -------------"<<endl<<endl;
-				
-				cout<<"--------------"<<endl;
-				cout<<"|   GRUPO B   |"<<endl;
-				cout<<"--------------"<<endl;
-				while(b!=NULL){
-					cout<<"|";
-					largo= b->equipo->getNombre().length()+3;
-					largo=13-largo;
-					mitad = largo/2;
-					for(int i=0;i<mitad;i++){
-						cout<<" ";
-					}					
-					cout<<b->equipo->getNombre()<<"["<<b->equipo->getPuntos()<<"]";
-					for(int i=0;i<mitad;i++){
-						cout<<" ";
-					}
-					cout<<"|"<<endl;
-					b=b->siguiente;
-				}
-				cout<<" -------------"<<endl<<endl;	
-				
-				cout<<"--------------"<<endl;
-				cout<<"|   GRUPO C   |"<<endl;
-				cout<<"--------------"<<endl;
-				while(c!=NULL){
-					cout<<"|";
-					largo= c->equipo->getNombre().length()+3;
-					largo=13-largo;
-					mitad = largo/2;
-					for(int i=0;i<mitad;i++){
-						cout<<" ";
-					}					
-					cout<<c->equipo->getNombre()<<"["<<c->equipo->getPuntos()<<"]";
-					for(int i=0;i<mitad;i++){
-						cout<<" ";
-					}
-					cout<<"|"<<endl;
-					c=c->siguiente;
-				}
-				cout<<" -------------"<<endl<<endl;
-				
-				cout<<"--------------"<<endl;
-				cout<<"|   GRUPO D   |"<<endl;
-				cout<<"--------------"<<endl;
-				while(d!=NULL){
-					cout<<"|";
-					largo= d->equipo->getNombre().length()+3;
-					largo=13-largo;
-					mitad = largo/2;
-					for(int i=0;i<mitad;i++){
-						cout<<" ";
-					}					
-					cout<<d->equipo->getNombre()<<"["<<d->equipo->getPuntos()<<"]";
-					for(int i=0;i<mitad;i++){
-						cout<<" ";
-					}
-					cout<<"|"<<endl;
-					d=d->siguiente;
-				}
-				cout<<" -------------"<<endl<<endl;			
+				mostrarEquipos();			
 											
 				system("pause");
 				break;
@@ -228,3 +115,251 @@ int main() {
 	system("pause");
 	return 0;
 }
+
+void mostrarEquiposOctavos(){
+		
+	NodoEquipo* a=mundial.getGrupoOctavosA();
+	NodoEquipo* b=mundial.getGrupoOctavosB();
+	NodoEquipo* c=mundial.getGrupoOctavosC();
+	NodoEquipo* d=mundial.getGrupoOctavosD();
+	
+	
+	
+	cout<<"\n\tGrupos"<<endl<<endl;
+	cout<<" -------------"<<endl;
+	cout<<"|   GRUPO A   |"<<endl;
+	cout<<" -------------"<<endl;
+	int largo;
+	int mitad;
+	while(a!=NULL){
+		cout<<"|";
+		largo= a->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}
+		cout<<a->equipo->getNombre()<<"["<<a->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}
+		cout<<"|"<<endl;
+		a=a->siguiente;
+	}
+	cout<<" -------------"<<endl<<endl;
+	
+	cout<<"--------------"<<endl;
+	cout<<"|   GRUPO B   |"<<endl;
+	cout<<"--------------"<<endl;
+
+	while(b!=NULL){
+		cout<<"|";
+		largo= b->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}					
+		cout<<b->equipo->getNombre()<<"["<<b->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}
+		cout<<"|"<<endl;
+		b=b->siguiente;
+	}
+	cout<<" -------------"<<endl<<endl;	
+	
+	cout<<"--------------"<<endl;
+	cout<<"|   GRUPO C   |"<<endl;
+	cout<<"--------------"<<endl;
+	while(c!=NULL){
+		cout<<"|";
+		largo= c->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}					
+		cout<<c->equipo->getNombre()<<"["<<c->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}
+		cout<<"|"<<endl;
+		c=c->siguiente;
+	}
+	cout<<" -------------"<<endl<<endl;
+	
+	cout<<"--------------"<<endl;
+	cout<<"|   GRUPO D   |"<<endl;
+	cout<<"--------------"<<endl;
+	while(d!=NULL){
+		cout<<"|";
+		largo= d->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}					
+		cout<<d->equipo->getNombre()<<"["<<d->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}
+		cout<<"|"<<endl;
+		d=d->siguiente;
+	}
+	cout<<" -------------"<<endl<<endl;	
+	
+}
+
+
+void mostrarEquipos(){
+		
+	NodoEquipo* a=mundial.getGrupoA();
+	NodoEquipo* b=mundial.getGrupoB();
+	NodoEquipo* c=mundial.getGrupoC();
+	NodoEquipo* d=mundial.getGrupoD();
+	
+	cout<<"\n\tGrupos"<<endl<<endl;
+	cout<<" -------------"<<endl;
+	cout<<"|   GRUPO A   |"<<endl;
+	cout<<" -------------"<<endl;
+	int largo;
+	int mitad;
+	while(a!=NULL){
+		cout<<"|";
+		largo= a->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}
+		cout<<a->equipo->getNombre()<<"["<<a->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}
+		cout<<"|"<<endl;
+		a=a->siguiente;
+	}
+	cout<<" -------------"<<endl<<endl;
+	
+	cout<<"--------------"<<endl;
+	cout<<"|   GRUPO B   |"<<endl;
+	cout<<"--------------"<<endl;
+	while(b!=NULL){
+		cout<<"|";
+		largo= b->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}					
+		cout<<b->equipo->getNombre()<<"["<<b->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}
+		cout<<"|"<<endl;
+		b=b->siguiente;
+	}
+	cout<<" -------------"<<endl<<endl;	
+	
+	cout<<"--------------"<<endl;
+	cout<<"|   GRUPO C   |"<<endl;
+	cout<<"--------------"<<endl;
+	while(c!=NULL){
+		cout<<"|";
+		largo= c->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}					
+		cout<<c->equipo->getNombre()<<"["<<c->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}
+		cout<<"|"<<endl;
+		c=c->siguiente;
+	}
+	cout<<" -------------"<<endl<<endl;
+	
+	cout<<"--------------"<<endl;
+	cout<<"|   GRUPO D   |"<<endl;
+	cout<<"--------------"<<endl;
+	while(d!=NULL){
+		cout<<"|";
+		largo= d->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}					
+		cout<<d->equipo->getNombre()<<"["<<d->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			cout<<" ";
+		}
+		cout<<"|"<<endl;
+		d=d->siguiente;
+	}
+	cout<<" -------------"<<endl<<endl;	
+	
+}
+
+void mostrarPartidos(nodoPartido* partidos,bool automatico){
+
+	Nodo* jugadoresTarjetas;
+	int contador=1;
+	cout<<"\tPARTIDOS"<<endl<<endl;
+	//int contador
+	while(partidos!=NULL){
+		cout<<"partido numero: "<<contador<<endl;
+		cout<<partidos->partido->getEquipo1()->getNombre();
+		cout<<"["<<partidos->partido->getEquipo1()->getGoles();
+		cout<<"] - ["<<partidos->partido->getEquipo2()->getGoles();
+		cout<<"]";
+		cout<<partidos->partido->getEquipo2()->getNombre()<<endl;
+		cout<<"Fecha: "<<partidos->partido->getFecha()<<endl;
+		cout<<"\nINFORMACION ADICIONAL"<<endl;
+		cout<<"tarjetas "<<partidos->partido->getEquipo1()->getNombre()<<"["<<partidos->partido->getEquipo1()->getTotalTarjetas()<<"]."<<endl;
+		cout<<"tarjetas rojas["<<partidos->partido->getEquipo1()->getTotalTarjetasRojas()<<"] {";
+		jugadoresTarjetas = partidos->partido->getEquipo1()->getJugadoresConRojas();
+		while(jugadoresTarjetas != NULL){
+			cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
+			jugadoresTarjetas = jugadoresTarjetas->siguiente;
+		}
+		cout<<"}."<<endl;
+		cout<<"tarjetas Amarillas["<<partidos->partido->getEquipo1()->getTotalTarjetasAmarillas()<<"] {";
+		jugadoresTarjetas = partidos->partido->getEquipo1()->getJugadoresConAmarillas();
+		while(jugadoresTarjetas != NULL){
+			cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
+			jugadoresTarjetas = jugadoresTarjetas->siguiente;
+		}
+		cout<<"}"<<endl<<endl;
+		
+		
+		cout<<"tarjetas "<<partidos->partido->getEquipo2()->getNombre()<<"["<<partidos->partido->getEquipo2()->getTotalTarjetas()<<"]."<<endl;
+		cout<<"tarjetas rojas["<<partidos->partido->getEquipo2()->getTotalTarjetasRojas()<<"] {";
+		jugadoresTarjetas = partidos->partido->getEquipo2()->getJugadoresConRojas();
+		while(jugadoresTarjetas != NULL){
+			cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
+			jugadoresTarjetas = jugadoresTarjetas->siguiente;
+		}
+		cout<<"}."<<endl;
+		cout<<"tarjetas Amarillas["<<partidos->partido->getEquipo2()->getTotalTarjetasAmarillas()<<"] {";
+		jugadoresTarjetas = partidos->partido->getEquipo2()->getJugadoresConAmarillas();
+		while(jugadoresTarjetas != NULL){
+			cout<<jugadoresTarjetas->jugador->getNombre()<<", ";
+			jugadoresTarjetas = jugadoresTarjetas->siguiente;
+		}
+		cout<<"}"<<endl;								
+		cout<<"----------------------------------------------"<<endl;
+		contador++;
+		partidos=partidos->siguiente;
+		if(automatico){
+			system("pause");
+		}
+		
+	}	
+	
+}
+#endif
+

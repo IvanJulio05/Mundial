@@ -27,6 +27,14 @@ class ListaEquipo{
 		void setLista(NodoEquipo *_lista){
 			lista=_lista;
 		}
+		bool isEmpty(){
+			if(lista==NULL){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
 			
 };
 
