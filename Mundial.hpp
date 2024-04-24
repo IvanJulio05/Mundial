@@ -731,10 +731,11 @@ class Mundial{
 			while(g1!=NULL){
 				
 				//en el caso de que existe otro con mayor puntaje, se hace cambio
-				if(equipo1->getPuntos() < g1->equipo->getPuntos()){
-					equipo2=equipo1;
+				if(equipo1->getPuntos() < g1->equipo->getPuntos()){					
+					equipo2=equipo1;					
 					equipo1=g1->equipo;
 					comprobar = false;
+					
 				}
 				//en el caso de que existe otro con el mismo punte,se toman los goles
 				else if(equipo1->getPuntos() == g1->equipo->getPuntos()){
@@ -746,18 +747,34 @@ class Mundial{
 						comprobar = false;
 					}
 					else if(equipo2!=NULL){
-						if(equipo2->getGoles()<g1->equipo->getGoles()){
-							equipo2= g1->equipo;
-							comprobar = false;
+						
+						if(equipo2->getPuntos() == g1->equipo->getPuntos()){
+							
+							if(equipo2->getGoles()<g1->equipo->getGoles()){
+								equipo2= g1->equipo;
+								
+								comprobar = false;
+							}							
 						}
+						else{
+							equipo2= g1->equipo;
+							
+						}
+
 						
 					}
 					else{
 						equipo2= g1->equipo;
+						
 						comprobar = false;
 					}
+										
+				}
+				else if(equipo2!=NULL){
 					
-					
+					if(equipo2->getPuntos()<g1->equipo->getPuntos()){						
+						equipo2= g1->equipo;
+					}
 				}
 				g1=g1->siguiente;
 			}
