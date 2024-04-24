@@ -24,6 +24,8 @@ class Mundial{
 		
 		nodoPartido *partidos=NULL;
 		nodoPartido *partidosOctavos=NULL;
+		nodoPartido *partidosSemiFinal=NULL;
+		nodoPartido *partidosFinal=NULL;
 		
 		//
 		ListaEquipo equipos=ListaEquipo();
@@ -40,14 +42,14 @@ class Mundial{
 		ListaEquipo grupoOctavos3=ListaEquipo();//2equipos
 		ListaEquipo grupoOctavos4=ListaEquipo();//2equipos
 		
-		//cuartos		
-		ListaEquipo grupoCuartos=ListaEquipo();//4equipos
+		//semiFinal		
+		ListaEquipo grupoSemiFinal=ListaEquipo();//4equipos
 		
-		//semifinal
-		ListaEquipo grupoSemiFinal=ListaEquipo();//2equipos
+		//final
+		ListaEquipo final=ListaEquipo();//2equipos
 		
 		//ganador
-		Equipo* equipo=NULL;
+		Equipo* ganador=NULL;
 		
 	private :
 		void OrganizarGrupo(){
@@ -74,6 +76,406 @@ class Mundial{
 			cargarEquipos();
 			OrganizarGrupo();
 		}		
+		
+		void jugarPartidoFinal(){
+			
+			organizarGrupoFinal();
+			
+			int max;
+			int defen1,defen2;
+			int ataque1,ataque2;
+			int total1,total2;
+			int ventaja;
+			
+			ListaEquipo* eq1=new ListaEquipo();
+			ListaEquipo* eq2=new ListaEquipo();
+			
+			NodoEquipo* grupo1=NULL;
+			NodoEquipo* grupo2=NULL;
+			NodoEquipo* semi= final.mostrarList();						
+			//for(int i=0;i<2;i++){
+										
+					while(semi!=NULL){//solo se repite una vez
+						
+						
+						eq1->agregar(semi->equipo);
+						grupo1=eq1->mostrarList();
+						semi=semi->siguiente;
+						eq2->agregar(semi->equipo);
+						grupo2=eq2->mostrarList();
+																		
+						
+						//estadisticas del primer equipo						
+						defen1=grupo1->equipo->getDefensa();
+						ataque1=grupo1->equipo->getAtaque();
+						total1=defen1+ataque1;
+						
+						//estadisticas del segundo equipo
+						defen2=grupo2->equipo->getDefensa();
+						ataque2=grupo2->equipo->getAtaque();							
+						total2=defen2+ataque2;
+						
+						if(total1>=total2){
+							ventaja= total1-total2;
+							asignarGoles(5+ventaja,grupo1);
+							asignarGoles(5,grupo2,grupo1);
+							
+						}
+						else{
+							ventaja= total2-total1;
+							asignarGoles(5,grupo1);
+							asignarGoles(5+ventaja,grupo2,grupo1);
+						}
+						
+						//asignando las tarjetas
+						
+						//primer equipo						
+						int agresividadTotal=grupo1->equipo->getTotalAgresividad();
+						const int AGRESIVIDAD_MAXIMA_TOLERADA=150;
+						const int AGRESIVIDAD_MEDIA_TOLERADA=100;
+						int sobrante;							
+						if(agresividadTotal > AGRESIVIDAD_MAXIMA_TOLERADA){
+							
+							sobrante= agresividadTotal - AGRESIVIDAD_MAXIMA_TOLERADA;
+							sobrante = sobrante/10;
+							sobrante*=2;
+							if(sobrante>=1){
+								if(sobrante<8){
+									
+									asignarTarjetas(10-sobrante,grupo1);
+								}
+								else{
+									asignarTarjetas(2,grupo1);
+								}
+								
+							}
+							
+						}else if(agresividadTotal > AGRESIVIDAD_MEDIA_TOLERADA){
+							
+							sobrante= agresividadTotal - AGRESIVIDAD_MEDIA_TOLERADA;
+							sobrante = sobrante/10;
+							
+							if(sobrante>=1){
+								asignarTarjetas(10-sobrante,grupo1);
+							}
+						}
+						else{
+							
+							asignarTarjetas(10,grupo1);
+							
+						}
+						
+						//segundo equipo							
+						agresividadTotal=grupo2->equipo->getTotalAgresividad();
+						sobrante;							
+						if(agresividadTotal > AGRESIVIDAD_MAXIMA_TOLERADA){
+							
+							sobrante= agresividadTotal - AGRESIVIDAD_MAXIMA_TOLERADA;
+							sobrante = sobrante/10;
+							sobrante*=2;
+							if(sobrante>=1){
+								if(sobrante<8){
+									asignarTarjetas(10-sobrante,grupo2);
+								}
+								else{
+									asignarTarjetas(2,grupo2);
+								}
+								
+							}
+							
+						}else if(agresividadTotal > AGRESIVIDAD_MEDIA_TOLERADA){
+							
+							sobrante= agresividadTotal - AGRESIVIDAD_MEDIA_TOLERADA;
+							sobrante = sobrante/10;
+							
+							if(sobrante>=1){
+								asignarTarjetas(10-sobrante,grupo2);
+							}
+						}
+						else{
+							asignarTarjetas(10,grupo2);
+							
+						}							
+						
+						//asignando los puntos
+						/*if(grupo->equipo->getGoles()>aux->equipo->getGoles()){
+							grupo->equipo->setPuntos(grupo->equipo->getPuntos()+3);
+						}
+						else{
+							aux->equipo->setPuntos(aux->equipo->getPuntos()+3);
+						}*/
+						
+						//guardando el partido(copia de los equipos originales)
+						
+						//equipo 1
+						Equipo* referencia = grupo1->equipo;
+						Equipo* e1 = new Equipo(referencia->getId(),referencia->getNombre(),referencia->getAtaque(),referencia->getDefensa(),referencia->getGrupo());
+						e1->setPuntos(referencia->getPuntos());
+						e1->setGoles(referencia->getGoles());
+						Nodo* jugaf= referencia->getjugadores();
+						int nAmarillas,nRojas;
+						
+						while(jugaf!=NULL){
+							Jugador* ref =jugaf->jugador; 
+							Jugador* juga = new Jugador(ref->getNumero(),ref->getNombre(),ref->getAgresividad());
+							nAmarillas= ref->getNumeroCartas(0);
+							nRojas= ref->getNumeroCartas(1);
+							//guardando las tarjetas del partido
+							//amarillas
+							for(int x=0;x<nAmarillas;x++){
+								juga->setTarjeta(0);
+							}
+							//rojas
+							for(int x=0;x<nRojas;x++){
+								juga->setTarjeta(1);
+							}
+							
+							e1->cargarJugadores(juga);
+							
+							jugaf=jugaf->siguiente;								
+						}
+						
+						//equipo 2	
+						referencia = grupo2->equipo;						
+						Equipo* e2 = new Equipo(referencia->getId(),referencia->getNombre(),referencia->getAtaque(),referencia->getDefensa(),referencia->getGrupo());
+						e2->setPuntos(referencia->getPuntos());
+						e2->setGoles(referencia->getGoles());							
+						jugaf= referencia->getjugadores();
+						while(jugaf!=NULL){
+							Jugador* ref =jugaf->jugador; 
+							Jugador* juga = new Jugador(ref->getNumero(),ref->getNombre(),ref->getAgresividad());
+							nAmarillas= ref->getNumeroCartas(0);
+							nRojas= ref->getNumeroCartas(1);
+							//guardando las tarjetas del partido
+							//amarillas
+							for(int x=0;x<nAmarillas;x++){
+								juga->setTarjeta(0);
+							}
+							//rojas
+							for(int x=0;x<nRojas;x++){
+								juga->setTarjeta(1);
+							}							
+							e2->cargarJugadores(juga);
+							
+							jugaf=jugaf->siguiente;
+						}							
+						Partido* parti = new Partido(e1,e2,"01/02/2000");
+						agregarPartidoFinal(parti);
+												
+						semi=semi->siguiente;
+					}					
+					
+
+									
+			//}	obteniendo el ganador del mundial
+			verificarGanador();
+		}
+		
+		void JugarPartidosSemiFinal(){
+			
+			organizarGrupoSemiFinal();
+			
+			int max;
+			int defen1,defen2;
+			int ataque1,ataque2;
+			int total1,total2;
+			int ventaja;
+			
+			ListaEquipo* eq1=new ListaEquipo();
+			ListaEquipo* eq2=new ListaEquipo();
+			ListaEquipo* eq3=new ListaEquipo();
+			ListaEquipo* eq4=new ListaEquipo();
+			
+			NodoEquipo* grupo1=NULL;
+			NodoEquipo* grupo2=NULL;
+			int contador=1;
+			NodoEquipo* semi= grupoSemiFinal.mostrarList();						
+			//for(int i=0;i<2;i++){
+										
+					while(semi!=NULL){
+						
+						if(contador==1){
+							eq1->agregar(semi->equipo);
+							grupo1=eq1->mostrarList();
+							semi=semi->siguiente;
+							eq2->agregar(semi->equipo);
+							grupo2=eq2->mostrarList();
+						}
+						else if(contador==2){
+							eq3->agregar(semi->equipo);
+							grupo1=eq3->mostrarList();
+							semi=semi->siguiente;
+							eq4->agregar(semi->equipo);
+							grupo2=eq4->mostrarList();
+						}												
+						
+						//estadisticas del primer equipo						
+						defen1=grupo1->equipo->getDefensa();
+						ataque1=grupo1->equipo->getAtaque();
+						total1=defen1+ataque1;
+						
+						//estadisticas del segundo equipo
+						defen2=grupo2->equipo->getDefensa();
+						ataque2=grupo2->equipo->getAtaque();							
+						total2=defen2+ataque2;
+						
+						if(total1>=total2){
+							ventaja= total1-total2;
+							asignarGoles(5+ventaja,grupo1);
+							asignarGoles(5,grupo2,grupo1);
+							
+						}
+						else{
+							ventaja= total2-total1;
+							asignarGoles(5,grupo1);
+							asignarGoles(5+ventaja,grupo2,grupo1);
+						}
+						
+						//asignando las tarjetas
+						
+						//primer equipo						
+						int agresividadTotal=grupo1->equipo->getTotalAgresividad();
+						const int AGRESIVIDAD_MAXIMA_TOLERADA=150;
+						const int AGRESIVIDAD_MEDIA_TOLERADA=100;
+						int sobrante;							
+						if(agresividadTotal > AGRESIVIDAD_MAXIMA_TOLERADA){
+							
+							sobrante= agresividadTotal - AGRESIVIDAD_MAXIMA_TOLERADA;
+							sobrante = sobrante/10;
+							sobrante*=2;
+							if(sobrante>=1){
+								if(sobrante<8){
+									
+									asignarTarjetas(10-sobrante,grupo1);
+								}
+								else{
+									asignarTarjetas(2,grupo1);
+								}
+								
+							}
+							
+						}else if(agresividadTotal > AGRESIVIDAD_MEDIA_TOLERADA){
+							
+							sobrante= agresividadTotal - AGRESIVIDAD_MEDIA_TOLERADA;
+							sobrante = sobrante/10;
+							
+							if(sobrante>=1){
+								asignarTarjetas(10-sobrante,grupo1);
+							}
+						}
+						else{
+							
+							asignarTarjetas(10,grupo1);
+							
+						}
+						
+						//segundo equipo							
+						agresividadTotal=grupo2->equipo->getTotalAgresividad();
+						sobrante;							
+						if(agresividadTotal > AGRESIVIDAD_MAXIMA_TOLERADA){
+							
+							sobrante= agresividadTotal - AGRESIVIDAD_MAXIMA_TOLERADA;
+							sobrante = sobrante/10;
+							sobrante*=2;
+							if(sobrante>=1){
+								if(sobrante<8){
+									asignarTarjetas(10-sobrante,grupo2);
+								}
+								else{
+									asignarTarjetas(2,grupo2);
+								}
+								
+							}
+							
+						}else if(agresividadTotal > AGRESIVIDAD_MEDIA_TOLERADA){
+							
+							sobrante= agresividadTotal - AGRESIVIDAD_MEDIA_TOLERADA;
+							sobrante = sobrante/10;
+							
+							if(sobrante>=1){
+								asignarTarjetas(10-sobrante,grupo2);
+							}
+						}
+						else{
+							asignarTarjetas(10,grupo2);
+							
+						}							
+						
+						//asignando los puntos
+						/*if(grupo->equipo->getGoles()>aux->equipo->getGoles()){
+							grupo->equipo->setPuntos(grupo->equipo->getPuntos()+3);
+						}
+						else{
+							aux->equipo->setPuntos(aux->equipo->getPuntos()+3);
+						}*/
+						
+						//guardando el partido(copia de los equipos originales)
+						
+						//equipo 1
+						Equipo* referencia = grupo1->equipo;
+						Equipo* e1 = new Equipo(referencia->getId(),referencia->getNombre(),referencia->getAtaque(),referencia->getDefensa(),referencia->getGrupo());
+						e1->setPuntos(referencia->getPuntos());
+						e1->setGoles(referencia->getGoles());
+						Nodo* jugaf= referencia->getjugadores();
+						int nAmarillas,nRojas;
+						
+						while(jugaf!=NULL){
+							Jugador* ref =jugaf->jugador; 
+							Jugador* juga = new Jugador(ref->getNumero(),ref->getNombre(),ref->getAgresividad());
+							nAmarillas= ref->getNumeroCartas(0);
+							nRojas= ref->getNumeroCartas(1);
+							//guardando las tarjetas del partido
+							//amarillas
+							for(int x=0;x<nAmarillas;x++){
+								juga->setTarjeta(0);
+							}
+							//rojas
+							for(int x=0;x<nRojas;x++){
+								juga->setTarjeta(1);
+							}
+							
+							e1->cargarJugadores(juga);
+							
+							jugaf=jugaf->siguiente;								
+						}
+						
+						//equipo 2	
+						referencia = grupo2->equipo;						
+						Equipo* e2 = new Equipo(referencia->getId(),referencia->getNombre(),referencia->getAtaque(),referencia->getDefensa(),referencia->getGrupo());
+						e2->setPuntos(referencia->getPuntos());
+						e2->setGoles(referencia->getGoles());							
+						jugaf= referencia->getjugadores();
+						while(jugaf!=NULL){
+							Jugador* ref =jugaf->jugador; 
+							Jugador* juga = new Jugador(ref->getNumero(),ref->getNombre(),ref->getAgresividad());
+							nAmarillas= ref->getNumeroCartas(0);
+							nRojas= ref->getNumeroCartas(1);
+							//guardando las tarjetas del partido
+							//amarillas
+							for(int x=0;x<nAmarillas;x++){
+								juga->setTarjeta(0);
+							}
+							//rojas
+							for(int x=0;x<nRojas;x++){
+								juga->setTarjeta(1);
+							}							
+							e2->cargarJugadores(juga);
+							
+							jugaf=jugaf->siguiente;
+						}							
+						Partido* parti = new Partido(e1,e2,"01/02/2000");
+						agregarPartidoSemiFinal(parti);
+												
+						contador++;
+						semi=semi->siguiente;
+					}					
+					
+
+									
+			//}			
+			
+			
+		}
 
 		void JugarPartidoOctavos(){
 			OrganizarGrupoOctavos(1);				
@@ -272,7 +674,7 @@ class Mundial{
 			}
 								
 		}	
-		
+	
 		void JugarPartido(){
 			
 			int max;
@@ -690,10 +1092,128 @@ class Mundial{
 					
 				}				
 			}
+				
+			
+		}
 		
+		void verificarGanador(){
+			
+			NodoEquipo* f = final.mostrarList();
+			Equipo* equipo1=NULL;																
+				
+			equipo1= f->equipo;
+			f=f->siguiente;
+			
+			if(equipo1->getGoles() < f->equipo->getGoles()){															
+				
+				equipo1=f->equipo;		
+						
+			}
+			
+			
+			//sacando copias del equipo
+			Equipo* e1 = new Equipo(equipo1->getId(),equipo1->getNombre(),equipo1->getAtaque(),equipo1->getDefensa(),equipo1->getGrupo());
+			Nodo* j = equipo1->getjugadores();
+			while(j!=NULL){
+				Jugador* juga= new Jugador(j->jugador->getNumero(),j->jugador->getNombre(),j->jugador->getAgresividad());
+				e1->cargarJugadores(juga);
+				j=j->siguiente;
+			}
+			//suplentes
+			j=equipo1->getSuplentes();
+			while(j!=NULL){
+				Jugador* suple= new Jugador(j->jugador->getNumero(),j->jugador->getNombre(),j->jugador->getAgresividad());
+				e1->cargarSuplentes(suple);
+				j=j->siguiente;
+			}			
+			
+			//guardando ganador
+			ganador = e1;
+			
+						
+		}
+		
+		void organizarGrupoSemiFinal(){
+			
+			NodoEquipo* g1 =grupoOctavos1.mostrarList();
+			NodoEquipo* g2 =grupoOctavos2.mostrarList();
+			NodoEquipo* g3 =grupoOctavos3.mostrarList();
+			NodoEquipo* g4 =grupoOctavos4.mostrarList();
+			
+			
+			Equipo* equipo1=NULL;
+			//primeros 2 partidos						
+			while(g1!=NULL){				
+						
+				if(g1->equipo->getGoles() > g2->equipo->getGoles()){															
+					
+					equipo1=g1->equipo;				
+				}
+				else{
+					equipo1=g2->equipo;	
+				}
+				
+				
+				//sacando copias del equipo
+				Equipo* e1 = new Equipo(equipo1->getId(),equipo1->getNombre(),equipo1->getAtaque(),equipo1->getDefensa(),equipo1->getGrupo());
+				Nodo* j = equipo1->getjugadores();
+				while(j!=NULL){
+					Jugador* juga= new Jugador(j->jugador->getNumero(),j->jugador->getNombre(),j->jugador->getAgresividad());
+					e1->cargarJugadores(juga);
+					j=j->siguiente;
+				}
+				//suplentes
+				j=equipo1->getSuplentes();
+				while(j!=NULL){
+					Jugador* suple= new Jugador(j->jugador->getNumero(),j->jugador->getNombre(),j->jugador->getAgresividad());
+					e1->cargarSuplentes(suple);
+					j=j->siguiente;
+				}			
+				
+				//guardando para la semiFinal
+				grupoSemiFinal.agregar(e1);				
+				
+				g1=g1->siguiente;
+				g2=g2->siguiente;
+			}	
+			
+			//resto de partidos
+			while(g3!=NULL){				
+						
+				if(g3->equipo->getGoles() > g4->equipo->getGoles()){															
+					
+					equipo1=g3->equipo;				
+				}
+				else{
+					equipo1=g4->equipo;	
+				}
+				
+				
+				//sacando copias del equipo
+				Equipo* e1 = new Equipo(equipo1->getId(),equipo1->getNombre(),equipo1->getAtaque(),equipo1->getDefensa(),equipo1->getGrupo());
+				Nodo* j = equipo1->getjugadores();
+				while(j!=NULL){
+					Jugador* juga= new Jugador(j->jugador->getNumero(),j->jugador->getNombre(),j->jugador->getAgresividad());
+					e1->cargarJugadores(juga);
+					j=j->siguiente;
+				}
+				//suplentes
+				j=equipo1->getSuplentes();
+				while(j!=NULL){
+					Jugador* suple= new Jugador(j->jugador->getNumero(),j->jugador->getNombre(),j->jugador->getAgresividad());
+					e1->cargarSuplentes(suple);
+					j=j->siguiente;
+				}			
+				
+				//guardando para la semiFinal
+				grupoSemiFinal.agregar(e1);				
+				
+				g3=g3->siguiente;
+				g4=g4->siguiente;
+			}				
+			
 
-			
-			
+					
 		}
 		
 		
@@ -878,6 +1398,47 @@ class Mundial{
 			
 		}
 		
+		void organizarGrupoFinal(){
+			
+			NodoEquipo* semi = grupoSemiFinal.mostrarList();
+			Equipo* equipo1=NULL;
+									
+			while(semi){				
+				
+				equipo1= semi->equipo;
+				semi=semi->siguiente;
+				if(equipo1->getGoles() < semi->equipo->getGoles()){															
+					
+					equipo1=semi->equipo;		
+							
+				}
+
+				
+				
+				//sacando copias del equipo
+				Equipo* e1 = new Equipo(equipo1->getId(),equipo1->getNombre(),equipo1->getAtaque(),equipo1->getDefensa(),equipo1->getGrupo());
+				Nodo* j = equipo1->getjugadores();
+				while(j!=NULL){
+					Jugador* juga= new Jugador(j->jugador->getNumero(),j->jugador->getNombre(),j->jugador->getAgresividad());
+					e1->cargarJugadores(juga);
+					j=j->siguiente;
+				}
+				//suplentes
+				j=equipo1->getSuplentes();
+				while(j!=NULL){
+					Jugador* suple= new Jugador(j->jugador->getNumero(),j->jugador->getNombre(),j->jugador->getAgresividad());
+					e1->cargarSuplentes(suple);
+					j=j->siguiente;
+				}			
+				
+				//guardando para la semiFinal
+				final.agregar(e1);				
+				
+				semi=semi->siguiente;
+			}	
+			
+			
+		}
 		/*
 		void HacerCambios(NodoEquipo &*equipo){
 			Nodo* jugadores=equipo->equipo->getjugadores();
@@ -1029,7 +1590,12 @@ class Mundial{
 		}
 		NodoEquipo* getGrupoOctavosD(){
 			return grupoOctavos4.mostrarList();
-		}						
+		}	
+		
+		NodoEquipo* getGrupoSemiFinal(){
+			return grupoSemiFinal.mostrarList();
+		}
+		
 		
 		nodoPartido* getPartidos(){
 			return partidos;
@@ -1037,6 +1603,16 @@ class Mundial{
 		
 		nodoPartido* getPartidosOctavos(){
 			return partidosOctavos;
+		}
+		nodoPartido* getPartidosSemiFinal(){
+			return partidosSemiFinal;
+		}
+		nodoPartido* getPartidoFinal(){
+			return partidosFinal;
+		}
+		
+		Equipo* getGanador(){
+			return ganador;
 		}
 		
 		void agregarPartido(Partido* &p){
@@ -1077,7 +1653,43 @@ class Mundial{
 			nuevoNodo->siguiente=aux1;
 		}		
 		
-		
+		void agregarPartidoSemiFinal(Partido* &p){
+			nodoPartido *nuevoNodo = new nodoPartido();
+			nuevoNodo->partido=p;
+			nodoPartido *aux1= partidosSemiFinal;
+			nodoPartido *aux2;
+			while(aux1!=NULL){
+				aux2=aux1;
+				aux1=aux1->siguiente;
+			}
+			if(aux1==partidosSemiFinal){
+				partidosSemiFinal=nuevoNodo;
+			}
+			else{
+				aux2->siguiente=nuevoNodo;
+			}
+			
+			nuevoNodo->siguiente=aux1;
+		}
+		//
+		void agregarPartidoFinal(Partido* &p){
+			nodoPartido *nuevoNodo = new nodoPartido();
+			nuevoNodo->partido=p;
+			nodoPartido *aux1= partidosFinal;
+			nodoPartido *aux2;
+			while(aux1!=NULL){
+				aux2=aux1;
+				aux1=aux1->siguiente;
+			}
+			if(aux1==partidosFinal){
+				partidosFinal=nuevoNodo;
+			}
+			else{
+				aux2->siguiente=nuevoNodo;
+			}
+			
+			nuevoNodo->siguiente=aux1;
+		}			
 		
 };
 #endif
