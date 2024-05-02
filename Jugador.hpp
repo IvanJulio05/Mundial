@@ -1,7 +1,5 @@
 #ifndef JUGADOR_HPP
 #define JUGADOR_HPP
-
-
 #include<iostream>
 #include<string>
 #include <sstream>

@@ -27,7 +27,7 @@ class Mundial{
 		nodoPartido *partidosSemiFinal=NULL;
 		nodoPartido *partidosFinal=NULL;
 		
-		//
+		//todos los jugadores
 		ListaEquipo equipos=ListaEquipo();
 		
 		//face de grupo
@@ -943,6 +943,7 @@ class Mundial{
 				
 				contador=1;
 				separador="0";
+				
 				//agregar equipo al mundial
 				equipos.agregar(equi);
 			}
@@ -1436,6 +1437,11 @@ class Mundial{
 				
 				semi=semi->siguiente;
 			}	
+			
+			
+		}
+		void exportar(){
+			
 			
 			
 		}

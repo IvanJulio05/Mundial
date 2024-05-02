@@ -11,6 +11,9 @@ using namespace std;
 
 void mostrarEquipos(int);
 void mostrarPartidos(nodoPartido*,bool);
+void exportarPartidos(nodoPartido*,bool);
+void exportarEquipos(int selection);
+void exportarTextos(string text);
 
 Mundial mundial = Mundial();
 
@@ -44,94 +47,133 @@ int main() {
 					switch(opcion2){
 						case 1:{
 							nodoPartido* partidos=mundial.getPartidos();
-							mostrarPartidos(partidos,false);							
+							mostrarPartidos(partidos,false);
+							exportarPartidos(partidos,false);
 							system("pause");
 							system("cls");
 							cout<<"\n\tPUNTAJES DE LA FACE DE GRUPO"<<endl<<endl;
+							exportarTextos("\n\tPUNTAJES DE LA FACE DE GRUPO");
 							mostrarEquipos(1);
+							exportarEquipos(1);
 							system("pause");
 							cout<<"\n\tEQUIPOS CLASIFICADOS"<<endl<<endl;
+							exportarTextos("\n\tEQUIPOS CLASIFICADOS");
 							mostrarEquipos(2);
+							exportarEquipos(2);
 							system("pause");
 							system("cls");		
-							cout<<"\n\tCUARTOS DE FINALES"<<endl<<endl;					
+							cout<<"\n\tCUARTOS DE FINALES"<<endl<<endl;		
+							exportarTextos("\n\tCUARTOS DE FINALES");		
 							mostrarPartidos(mundial.getPartidosOctavos(),false);
+							exportarPartidos(mundial.getPartidosOctavos(),true);
 							system("pause");
 							cout<<"\n\tEQUIPOS CLASIFICADOS"<<endl<<endl;
-							mostrarEquipos(3);							
+							exportarTextos("\n\tEQUIPOS CLASIFICADOS");
+							mostrarEquipos(3);		
+							exportarEquipos(3);
 							system("pause");
 							system("cls");
 							cout<<"\n\tSEMI FINAL"<<endl<<endl;
-							mostrarPartidos(mundial.getPartidosSemiFinal(),false);							
+							exportarTextos("\n\tSEMI FINAL");
+							mostrarPartidos(mundial.getPartidosSemiFinal(),false);	
+							exportarPartidos(mundial.getPartidosSemiFinal(),true);						
 							system("pause");
 							cout<<"\n\tFINAL"<<endl<<endl;
+							exportarTextos("\n\tFINAL");
 							mostrarPartidos(mundial.getPartidoFinal(),false);
+							exportarPartidos(mundial.getPartidoFinal(),true);
 							system("pause");
 							system("cls");
 							cout<<"\n\tGANADOR DEL MUNDIAL"<<endl<<endl;
 							for(int i=0;i<100;i++){
 								cout<<mundial.getGanador()->getNombre()<<endl;
 							}
-							system("pause");
+							system("pause");							
 							break;
 						}
 						case 2:{
 							nodoPartido* partidos=mundial.getPartidos();
-							mostrarPartidos(partidos,true);							
-							
-							system("cls");
+							mostrarPartidos(partidos,true);
+							exportarPartidos(partidos,false);
+							//system("pause");
+							//system("cls");
 							cout<<"\n\tPUNTAJES DE LA FACE DE GRUPO"<<endl<<endl;
+							exportarTextos("\n\tPUNTAJES DE LA FACE DE GRUPO");
 							mostrarEquipos(1);
-							system("pause");
+							exportarEquipos(1);
+							//system("pause");
 							cout<<"\n\tEQUIPOS CLASIFICADOS"<<endl<<endl;
+							exportarTextos("\n\tEQUIPOS CLASIFICADOS");
 							mostrarEquipos(2);
-							system("pause");
-							system("cls");		
-							cout<<"\n\tCUARTOS DE FINALES"<<endl<<endl;					
+							exportarEquipos(2);
+							//system("pause");
+							//system("cls");		
+							cout<<"\n\tCUARTOS DE FINALES"<<endl<<endl;		
+							exportarTextos("\n\tCUARTOS DE FINALES");		
 							mostrarPartidos(mundial.getPartidosOctavos(),true);
-						
+							exportarPartidos(mundial.getPartidosOctavos(),true);
+							//system("pause");
 							cout<<"\n\tEQUIPOS CLASIFICADOS"<<endl<<endl;
-							mostrarEquipos(3);							
-							system("pause");
-							system("cls");
+							exportarTextos("\n\tEQUIPOS CLASIFICADOS");
+							mostrarEquipos(3);		
+							exportarEquipos(3);
+							//system("pause");
+							//system("cls");
 							cout<<"\n\tSEMI FINAL"<<endl<<endl;
-							mostrarPartidos(mundial.getPartidosSemiFinal(),true);							
-							
+							exportarTextos("\n\tSEMI FINAL");
+							mostrarPartidos(mundial.getPartidosSemiFinal(),true);	
+							exportarPartidos(mundial.getPartidosSemiFinal(),true);						
+							//system("pause");
 							cout<<"\n\tFINAL"<<endl<<endl;
+							exportarTextos("\n\tFINAL");
 							mostrarPartidos(mundial.getPartidoFinal(),true);
-							
+							exportarPartidos(mundial.getPartidoFinal(),true);
+							system("pause");
 							system("cls");
 							cout<<"\n\tGANADOR DEL MUNDIAL"<<endl<<endl;
 							for(int i=0;i<100;i++){
 								cout<<mundial.getGanador()->getNombre()<<endl;
 							}
-							system("pause");
+							system("pause");							
 							break;
 						}
 						case 3:{
 							nodoPartido* partidos=mundial.getPartidos();
-							mostrarPartidos(partidos,false);							
+							mostrarPartidos(partidos,false);
+							exportarPartidos(partidos,false);
 							//system("pause");
 							//system("cls");
 							cout<<"\n\tPUNTAJES DE LA FACE DE GRUPO"<<endl<<endl;
+							exportarTextos("\n\tPUNTAJES DE LA FACE DE GRUPO");
 							mostrarEquipos(1);
+							exportarEquipos(1);
 							//system("pause");
 							cout<<"\n\tEQUIPOS CLASIFICADOS"<<endl<<endl;
+							exportarTextos("\n\tEQUIPOS CLASIFICADOS");
 							mostrarEquipos(2);
+							exportarEquipos(2);
 							//system("pause");
 							//system("cls");		
-							cout<<"\n\tCUARTOS DE FINALES"<<endl<<endl;					
+							cout<<"\n\tCUARTOS DE FINALES"<<endl<<endl;		
+							exportarTextos("\n\tCUARTOS DE FINALES");		
 							mostrarPartidos(mundial.getPartidosOctavos(),false);
+							exportarPartidos(mundial.getPartidosOctavos(),true);
 							//system("pause");
 							cout<<"\n\tEQUIPOS CLASIFICADOS"<<endl<<endl;
-							mostrarEquipos(3);							
+							exportarTextos("\n\tEQUIPOS CLASIFICADOS");
+							mostrarEquipos(3);		
+							exportarEquipos(3);
 							//system("pause");
 							//system("cls");
 							cout<<"\n\tSEMI FINAL"<<endl<<endl;
-							mostrarPartidos(mundial.getPartidosSemiFinal(),false);							
+							exportarTextos("\n\tSEMI FINAL");
+							mostrarPartidos(mundial.getPartidosSemiFinal(),false);	
+							exportarPartidos(mundial.getPartidosSemiFinal(),true);						
 							//system("pause");
 							cout<<"\n\tFINAL"<<endl<<endl;
+							exportarTextos("\n\tFINAL");
 							mostrarPartidos(mundial.getPartidoFinal(),false);
+							exportarPartidos(mundial.getPartidoFinal(),true);
 							system("pause");
 							system("cls");
 							cout<<"\n\tGANADOR DEL MUNDIAL"<<endl<<endl;
@@ -192,6 +234,179 @@ int main() {
 	
 	system("pause");
 	return 0;
+}
+
+void exportarTextos(string text){
+	ofstream archivo;
+	archivo.open("Informacion_del_mundial.txt",ios::app);
+	
+	if(archivo.fail()){
+		cout<<"lo siento hubo un error al momentor de exportar la informacion"<<endl;
+		exit(1);
+	}
+	
+	archivo<<text<<endl<<endl;
+	archivo.clear();
+}
+
+void exportarEquipos(int selection){
+	NodoEquipo* a=NULL;
+	NodoEquipo* b=NULL;
+	NodoEquipo* c=NULL;
+	NodoEquipo* d=NULL;			
+		
+	ofstream archivo;
+	archivo.open("Informacion_del_mundial.txt",ios::app);
+	
+	if(archivo.fail()){
+		cout<<"lo siento hubo un error al momentor de exportar la informacion"<<endl;
+		exit(1);
+	}
+	switch(selection){
+		case 1:{
+				a=mundial.getGrupoA();
+				b=mundial.getGrupoB();
+				c=mundial.getGrupoC();
+				d=mundial.getGrupoD();			
+			break;
+		}
+		case 2:{
+				a=mundial.getGrupoOctavosA();
+				b=mundial.getGrupoOctavosB();
+				c=mundial.getGrupoOctavosC();
+				d=mundial.getGrupoOctavosD();						
+			break;
+		}
+		case 3:{
+			NodoEquipo* semiFinal= mundial.getGrupoSemiFinal();
+			ListaEquipo* _a = new ListaEquipo();
+			ListaEquipo* _b = new ListaEquipo();
+			ListaEquipo* _c = new ListaEquipo();
+			ListaEquipo* _d = new ListaEquipo();
+			int grupo;
+			while(semiFinal!=NULL){
+				grupo= semiFinal->equipo->getGrupo();
+				
+				switch(grupo){
+					case 1:{
+						_a->agregar(semiFinal->equipo);
+						a=_a->mostrarList();
+						break;
+					}
+					case 2:{
+						_b->agregar(semiFinal->equipo);
+						b=_b->mostrarList();						
+						break;
+					}
+					case 3:{
+						_c->agregar(semiFinal->equipo);
+						c=_c->mostrarList();						
+						break;
+					}
+					case 4:{
+						_d->agregar(semiFinal->equipo);
+						d=_d->mostrarList();						
+						break;
+					}
+				}
+				semiFinal=semiFinal->siguiente;
+			}
+			
+			break;
+		}
+
+
+		
+		
+	}
+
+	
+	
+	
+	archivo<<"\n\tGrupos"<<endl<<endl;
+	archivo<<" -------------"<<endl;
+	archivo<<"|   GRUPO A   |"<<endl;
+	archivo<<" -------------"<<endl;
+	int largo;
+	int mitad;
+	while(a!=NULL){
+		archivo<<"|";
+		largo= a->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			archivo<<" ";
+		}
+		archivo<<a->equipo->getNombre()<<"["<<a->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			archivo<<" ";
+		}
+		archivo<<"|"<<endl;
+		a=a->siguiente;
+	}
+	archivo<<" -------------"<<endl<<endl;
+	
+	archivo<<"--------------"<<endl;
+	archivo<<"|   GRUPO B   |"<<endl;
+	archivo<<"--------------"<<endl;
+
+	while(b!=NULL){
+		archivo<<"|";
+		largo= b->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			archivo<<" ";
+		}					
+		archivo<<b->equipo->getNombre()<<"["<<b->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			archivo<<" ";
+		}
+		archivo<<"|"<<endl;
+		b=b->siguiente;
+	}
+	archivo<<" -------------"<<endl<<endl;	
+	
+	archivo<<"--------------"<<endl;
+	archivo<<"|   GRUPO C   |"<<endl;
+	archivo<<"--------------"<<endl;
+	while(c!=NULL){
+		archivo<<"|";
+		largo= c->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			archivo<<" ";
+		}					
+		archivo<<c->equipo->getNombre()<<"["<<c->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			archivo<<" ";
+		}
+		archivo<<"|"<<endl;
+		c=c->siguiente;
+	}
+	archivo<<" -------------"<<endl<<endl;
+	
+	archivo<<"--------------"<<endl;
+	archivo<<"|   GRUPO D   |"<<endl;
+	archivo<<"--------------"<<endl;
+	while(d!=NULL){
+		archivo<<"|";
+		largo= d->equipo->getNombre().length()+3;
+		largo=13-largo;
+		mitad = largo/2;
+		for(int i=0;i<mitad;i++){
+			archivo<<" ";
+		}					
+		archivo<<d->equipo->getNombre()<<"["<<d->equipo->getPuntos()<<"]";
+		for(int i=0;i<mitad;i++){
+			archivo<<" ";
+		}
+		archivo<<"|"<<endl;
+		d=d->siguiente;
+	}
+	archivo<<" -------------"<<endl<<endl;		
+	archivo.close();
 }
 
 void mostrarEquipos(int selection){
@@ -348,6 +563,73 @@ void mostrarEquipos(int selection){
 	
 }
 
+void exportarPartidos(nodoPartido* partidos,bool agregar){
+	Nodo* jugadoresTarjetas;
+	ofstream archivo;
+	if(agregar){
+		archivo.open("Informacion_del_mundial.txt",ios::app);	
+	}
+	else{
+		archivo.open("Informacion_del_mundial.txt",ios::out);
+	}
+	
+	
+	if(archivo.fail()){
+		cout<<"Algo fallo al momento de exportar la informacion";
+		exit(1);
+	}
+	
+	int contador=1;
+	archivo<<"\tPARTIDOS"<<endl<<endl;
+	//int contador
+	while(partidos!=NULL){
+		archivo<<"partido numero: "<<contador<<endl;
+		archivo<<partidos->partido->getEquipo1()->getNombre();
+		archivo<<"["<<partidos->partido->getEquipo1()->getGoles();
+		archivo<<"] - ["<<partidos->partido->getEquipo2()->getGoles();
+		archivo<<"]";
+		archivo<<partidos->partido->getEquipo2()->getNombre()<<endl;
+		archivo<<"Fecha: "<<partidos->partido->getFecha()<<endl;
+		archivo<<"\nINFORMACION ADICIONAL"<<endl;
+		archivo<<"tarjetas "<<partidos->partido->getEquipo1()->getNombre()<<"["<<partidos->partido->getEquipo1()->getTotalTarjetas()<<"]."<<endl;
+		archivo<<"tarjetas rojas["<<partidos->partido->getEquipo1()->getTotalTarjetasRojas()<<"] {";
+		jugadoresTarjetas = partidos->partido->getEquipo1()->getJugadoresConRojas();
+		while(jugadoresTarjetas != NULL){
+			archivo<<jugadoresTarjetas->jugador->getNombre()<<", ";
+			jugadoresTarjetas = jugadoresTarjetas->siguiente;
+		}
+		archivo<<"}."<<endl;
+		archivo<<"tarjetas Amarillas["<<partidos->partido->getEquipo1()->getTotalTarjetasAmarillas()<<"] {";
+		jugadoresTarjetas = partidos->partido->getEquipo1()->getJugadoresConAmarillas();
+		while(jugadoresTarjetas != NULL){
+			archivo<<jugadoresTarjetas->jugador->getNombre()<<", ";
+			jugadoresTarjetas = jugadoresTarjetas->siguiente;
+		}
+		archivo<<"}"<<endl<<endl;
+		
+		
+		archivo<<"tarjetas "<<partidos->partido->getEquipo2()->getNombre()<<"["<<partidos->partido->getEquipo2()->getTotalTarjetas()<<"]."<<endl;
+		archivo<<"tarjetas rojas["<<partidos->partido->getEquipo2()->getTotalTarjetasRojas()<<"] {";
+		jugadoresTarjetas = partidos->partido->getEquipo2()->getJugadoresConRojas();
+		while(jugadoresTarjetas != NULL){
+			archivo<<jugadoresTarjetas->jugador->getNombre()<<", ";
+			jugadoresTarjetas = jugadoresTarjetas->siguiente;
+		}
+		archivo<<"}."<<endl;
+		archivo<<"tarjetas Amarillas["<<partidos->partido->getEquipo2()->getTotalTarjetasAmarillas()<<"] {";
+		jugadoresTarjetas = partidos->partido->getEquipo2()->getJugadoresConAmarillas();
+		while(jugadoresTarjetas != NULL){
+			archivo<<jugadoresTarjetas->jugador->getNombre()<<", ";
+			jugadoresTarjetas = jugadoresTarjetas->siguiente;
+		}
+		archivo<<"}"<<endl;								
+		archivo<<"----------------------------------------------"<<endl;
+		contador++;
+		partidos=partidos->siguiente;
+		
+	}	
+	archivo.close();
+}
 
 
 
